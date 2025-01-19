@@ -1,3 +1,7 @@
+import { Body } from "../components/Body";
+import Header from "../components/Header";
+import { SideBar } from "../components/Sidebar";
+
 export const Home = () => {
   return (
     <div

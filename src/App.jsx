@@ -30,6 +30,29 @@ function App() {
       ],
     },
   ];
+
+  const videos = [
+    {
+      id: 1,
+      thumbnail: "https://picsum.photos/300/200",
+      title: "Learn React in 30 Minutes",
+      channel: "Web Dev Simplified",
+      views: "1.2M views",
+      timestamp: "3 days ago",
+      channelAvatar: "https://picsum.photos/40/40",
+    },
+    {
+      id: 2,
+      thumbnail: "https://picsum.photos/300/200",
+      title: "Build a YouTube Clone with React",
+      channel: "Clever Programmer",
+      views: "850K views",
+      timestamp: "1 week ago",
+      channelAvatar: "https://picsum.photos/40/40",
+    },
+    // Add more video objects as needed
+  ];
+
   return (
     <div
       style={{
@@ -79,15 +102,70 @@ function App() {
             </div>
           ))}
         </div>
+
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            padding: "12px",
             flex: 1,
+            padding: "24px",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            gap: "20px",
+            overflowY: "auto",
           }}
         >
-          Main App Body
+          {videos.map((video) => (
+            <div key={video.id} style={{ cursor: "pointer" }}>
+              <img
+                src={video.thumbnail}
+                alt={video.title}
+                style={{
+                  width: "100%",
+                  borderRadius: "12px",
+                  marginBottom: "12px",
+                }}
+              />
+              <div style={{ display: "flex", gap: "12px" }}>
+                <img
+                  src={video.channelAvatar}
+                  alt={video.channel}
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                  }}
+                />
+                <div>
+                  <h3
+                    style={{
+                      margin: "0 0 4px 0",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {video.title}
+                  </h3>
+                  <p
+                    style={{
+                      margin: "0",
+                      fontSize: "14px",
+                      color: "#606060",
+                    }}
+                  >
+                    {video.channel}
+                  </p>
+                  <p
+                    style={{
+                      margin: "4px 0 0 0",
+                      fontSize: "14px",
+                      color: "#606060",
+                    }}
+                  >
+                    {video.views} • {video.timestamp}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

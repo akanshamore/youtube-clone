@@ -1,0 +1,48 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+}
+
+.header__logo {
+    height: 25px;
+    object-fit: contain;
+    margin-left: 20px;
+}
+
+.header__left {
+    display: flex;
+    align-items: center;
+
+}
+
+.header__title {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.header__center {
+    flex: 0.5;
+    margin-left: 40px;
+}
+
+.header__center input {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 16px;
+
+}
+
+.header__center input:focus {
+    outline: none;
+    border-color: #1f75fe;
+}

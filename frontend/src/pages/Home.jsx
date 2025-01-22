@@ -1,6 +1,7 @@
 import { Body } from "../components/Body";
 import Header from "../components/Header";
 import { SideBar } from "../components/Sidebar";
+import { FilterButtons } from "../components/FilterButtons";
 
 export const Home = () => {
   return (
@@ -13,7 +14,7 @@ export const Home = () => {
       }}
     >
       <Header />
-
+      <FilterButtons />
       <div style={{ display: "flex", backgroundColor: "#f9f9f9", flex: 1 }}>
         <SideBar />
         <Body />

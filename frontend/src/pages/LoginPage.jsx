@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { LOGIN_URL } from "../utils/URLs";
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: "akanshamore12@outlook.com",
+    password: "123456",
   });
 
   const handleChange = (e) => {
@@ -14,9 +15,19 @@ export const LoginPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Login attempt with:", formData);
+
+    const res = await fetch("http://localhost:3000/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const response = await res.json();
+
+    console.log("Response:", response);
   };
 
   return (

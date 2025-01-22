@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_URL } from "../utils/URLs";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../redux/slices/authSlice";
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "akanshamore12@outlook.com",
     password: "123456",
@@ -19,15 +23,24 @@ export const LoginPage = () => {
     e.preventDefault();
     console.log("Login attempt with:", formData);
 
-    const res = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const res = await fetch(LOGIN_URL, {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+      });
 
-    const response = await res.json();
+      const response = await res.json();
 
-    console.log("Response:", response);
+      if (response.token) {
+        dispatch(setAuth(response));
+        navigate("/");
+      }
+
+      console.log("Response:", response);
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   return (

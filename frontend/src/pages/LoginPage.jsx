@@ -8,8 +8,8 @@ export const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    email: "akanshamore12@outlook.com",
-    password: "123456",
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -98,7 +98,7 @@ export const LoginPage = () => {
 
           <div className="flex items-center justify-between pt-4">
             <Link
-              to="/signup"
+              to="/register"
               className="text-blue-600 font-medium text-sm hover:text-blue-800"
             >
               Create account

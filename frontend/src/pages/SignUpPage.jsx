@@ -1,15 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../redux/slices/authSlice";
+import { REGISTER_URL } from "../utils/URLs";
 
 export const SignupPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
+  const [error, setError] = useState("");
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -17,9 +24,33 @@ export const SignupPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Signup attempt with:", formData);
+    try {
+      const res = await fetch(REGISTER_URL, {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const response = await res.json();
+
+      if (response.token) {
+        dispatch(setAuth(response));
+        navigate("/");
+      }
+
+      if (response.error) {
+        setError(response.message);
+      }
+
+      console.log("Response:", response);
+    } catch (error) {
+      console.log("Error:", error);
+      setError("An error occurred. Please try again.");
+      setError();
+    }
   };
 
   return (
@@ -41,23 +72,22 @@ export const SignupPage = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          {error && (
+            <div
+              className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
           <div className="flex gap-4">
             <input
               type="text"
-              name="firstName"
-              value={formData.firstName}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
-              className="w-1/2 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-base"
-              placeholder="First name"
-              required
-            />
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              className="w-1/2 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-base"
-              placeholder="Last name"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-base"
+              placeholder="Name"
               required
             />
           </div>

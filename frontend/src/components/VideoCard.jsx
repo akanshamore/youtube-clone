@@ -1,4 +1,7 @@
+import { timeAgo } from "../utils/timeAgo";
+
 export const VideoCard = ({ video }) => {
+  console.log(video);
   return (
     <div key={video.id} style={{ cursor: "pointer" }}>
       <img
@@ -12,8 +15,8 @@ export const VideoCard = ({ video }) => {
       />
       <div style={{ display: "flex", gap: "12px" }}>
         <img
-          src={video.channelAvatar}
-          alt={video.channel}
+          src={video.channelId.avatarUrl}
+          alt={video.channelId.name}
           style={{
             width: "36px",
             height: "36px",
@@ -37,7 +40,7 @@ export const VideoCard = ({ video }) => {
               color: "#606060",
             }}
           >
-            {video.channel}
+            {video.channelId.name}
           </p>
           <p
             style={{
@@ -46,7 +49,7 @@ export const VideoCard = ({ video }) => {
               color: "#606060",
             }}
           >
-            {video.views} • {video.timestamp}
+            {video.views} • {timeAgo(video.createdAt)}
           </p>
         </div>
       </div>

@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import { CREATE_CHANNEL_URL, GET_USER_CHANNELS_URL } from "../utils/URLs";
+import {
+  CREATE_CHANNEL_URL,
+  GET_USER_CHANNELS_URL,
+  UPLOAD_VIDEO_URL,
+} from "../utils/URLs";
 
 function UploadVideo() {
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +23,7 @@ function UploadVideo() {
   const [videoData, setVideoData] = useState({
     title: "",
     thumbnail: "",
+    videoUrl: "", // Add this field
     timestamp: new Date().toISOString(),
   });
 
@@ -84,7 +89,7 @@ function UploadVideo() {
         channelId: selectedChannel._id,
       };
 
-      await fetch("/api/videos", {
+      await fetch(UPLOAD_VIDEO_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -227,6 +232,19 @@ function UploadVideo() {
             type="url"
             name="thumbnail"
             value={videoData.thumbnail}
+            onChange={handleVideoInputChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Video URL
+          </label>
+          <input
+            type="url"
+            name="videoUrl"
+            value={videoData.videoUrl}
             onChange={handleVideoInputChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             required

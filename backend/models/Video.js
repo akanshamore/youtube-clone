@@ -11,6 +11,10 @@ const videoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    videoUrl: {
+      type: String,
+      required: true,
+    },
     channelId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Channel",
@@ -19,10 +23,6 @@ const videoSchema = new mongoose.Schema(
     views: {
       type: String,
       default: "0",
-    },
-    timestamp: {
-      type: String,
-      required: true,
     },
   },
   {

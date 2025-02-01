@@ -1,58 +1,85 @@
 const Video = require("../models/Video");
+const Channel = require("../models/Channel");
 
-// Get videos
+// Get all videos
 const getVideos = async (req, res) => {
   try {
-    const products = await Video.find();
-    res.json(products);
+    const videos = await Video.find().populate("channelId");
+    res.json(videos);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+// Upload new video
 const uploadVideo = async (req, res) => {
   try {
-    const { name, price, description, stockQuantity } = req.body;
-    if (!name || !price || !description || !stockQuantity) {
-      return res.status(400).json({ message: "Please fill all the fields" });
-    }
+    const { title, thumbnail, videoUrl, channelId } = req.body;
 
-    // Check if a product with the same name exists
-    const existingProduct = await Product.findOne({ name });
-
-    if (existingProduct) {
+    if (!title || !thumbnail || !videoUrl || !channelId) {
       return res
         .status(400)
-        .json({ message: "Product with this name already exists." });
+        .json({ message: "Please provide all required fields" });
     }
 
-    // If the product doesn't exist, create and save the new user
-    const product = new Product({
-      name,
-      price,
-      description,
-      stockQuantity,
+    // Verify if channel exists
+    const channelExists = await Channel.findById(channelId);
+    if (!channelExists) {
+      return res.status(404).json({ message: "Channel not found" });
+    }
+
+    const video = new Video({
+      title,
+      thumbnail,
+      videoUrl,
+      channelId,
+      views: "0", // Default value
     });
 
-    await product.save();
-    res
-      .status(201)
-      .json({ message: "Product created successfully", product: product });
+    await video.save();
+    res.status(201).json({
+      message: "Video uploaded successfully",
+      video: video,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-// const getProductById = async (req, res) => {
-//   try {
-//     const product = await Product.findById(req.params.id);
-//     if (!product) {
-//       return res.status(404).json({ message: "Product not found" });
-//     }
-//     res.json(product);
-//   } catch (error) {
-//     res.status(500).json({ message: "An error occurred" });
-//   }
-// };
+// Get video by ID
+const getVideoById = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id).populate("channelId");
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+    res.json(video);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-module.exports = { getVideos, uploadVideo };
+// Update video views
+const updateViews = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    const currentViews = parseInt(video.views);
+    video.views = (currentViews + 1).toString();
+
+    await video.save();
+    res.json(video);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  getVideos,
+  uploadVideo,
+  getVideoById,
+  updateViews,
+};

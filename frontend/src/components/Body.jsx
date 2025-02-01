@@ -1,188 +1,22 @@
+import { useEffect, useState } from "react";
 import { VideoCard } from "./videoCard";
 
 export const Body = () => {
-  const videos = [
-    {
-      id: 1,
-      thumbnail: "https://picsum.photos/seed/video1/300/200",
-      title: "Learn React in 30 Minutes",
-      channel: "Web Dev Simplified",
-      views: "1.2M views",
-      timestamp: "3 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 2,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Build a YouTube Clone with React",
-      channel: "Clever Programmer",
-      views: "850K views",
-      timestamp: "1 week ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 3,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "JavaScript Crash Course 2024",
-      channel: "Programming with Mosh",
-      views: "2.1M views",
-      timestamp: "2 weeks ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 4,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Next.js 14 Tutorial - Full Course",
-      channel: "Fireship",
-      views: "500K views",
-      timestamp: "5 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 5,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Build a Netflix Clone with React",
-      channel: "Sonny Sangha",
-      views: "750K views",
-      timestamp: "1 month ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 6,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "TypeScript Full Course 2024",
-      channel: "Academind",
-      views: "300K views",
-      timestamp: "4 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 7,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "React Native vs Flutter - Which is Better?",
-      channel: "Tech With Tim",
-      views: "900K views",
-      timestamp: "2 months ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 8,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "CSS Grid Complete Guide",
-      channel: "Kevin Powell",
-      views: "1.5M views",
-      timestamp: "3 weeks ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 9,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Docker for Beginners",
-      channel: "TechWorld with Nana",
-      views: "400K views",
-      timestamp: "6 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 10,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "MongoDB Complete Course",
-      channel: "Net Ninja",
-      views: "600K views",
-      timestamp: "1 month ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 11,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "AWS Services Explained",
-      channel: "Cloud Guru",
-      views: "1.1M views",
-      timestamp: "2 weeks ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 12,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Python for Data Science",
-      channel: "Data School",
-      views: "800K views",
-      timestamp: "5 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 13,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "GraphQL vs REST API",
-      channel: "Ben Awad",
-      views: "450K views",
-      timestamp: "1 week ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 14,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Vue.js for Beginners",
-      channel: "Vue Mastery",
-      views: "700K views",
-      timestamp: "3 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 15,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Rust Programming Language Tutorial",
-      channel: "Let's Get Rusty",
-      views: "250K views",
-      timestamp: "4 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 16,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Machine Learning Basics",
-      channel: "Sentdex",
-      views: "950K views",
-      timestamp: "2 weeks ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 17,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "iOS Development with Swift",
-      channel: "CodeWithChris",
-      views: "550K views",
-      timestamp: "1 month ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 18,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Blockchain Development Tutorial",
-      channel: "Dapp University",
-      views: "650K views",
-      timestamp: "6 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 19,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Angular vs React in 2024",
-      channel: "Traversy Media",
-      views: "1.3M views",
-      timestamp: "1 week ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-    {
-      id: 20,
-      thumbnail: "https://picsum.photos/300/200",
-      title: "Full Stack Development Roadmap",
-      channel: "Dev Ed",
-      views: "2M views",
-      timestamp: "4 days ago",
-      channelAvatar: "https://picsum.photos/40/40",
-    },
-  ];
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/videos");
+        const data = await response.json();
+        setVideos(data);
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+    };
+
+    fetchVideos();
+  }, []);
 
   return (
     <div

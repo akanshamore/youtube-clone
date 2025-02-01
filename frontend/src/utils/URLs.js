@@ -7,3 +7,5 @@ export const GET_USER_CHANNELS_URL = `${BASE_URL}/api/channels/user`;
 export const GET_CHANNEL_BY_ID_URL = `${BASE_URL}/api/channels/:id`;
 export const UPDATE_CHANNEL_URL = `${BASE_URL}/api/channels/:id`;
 export const DELETE_CHANNEL_URL = `${BASE_URL}/api/channels/:id`;
+
+export const UPLOAD_VIDEO_URL = `${BASE_URL}/api/videos/upload`;

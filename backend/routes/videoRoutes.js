@@ -1,11 +1,19 @@
 const express = require("express");
-
-const { getProducts } = require("../controllers/videoController");
-
 const router = express.Router();
+const authMiddleware = require("../middlewares/authMiddleware");
+const {
+  getVideos,
+  uploadVideo,
+  getVideoById,
+  updateViews,
+} = require("../controllers/videoController");
 
-router.get("/", getProducts);
-// router.post("/", createProduct);
-// router.get("/:id", getProductById);
+// Public routes
+router.get("/", getVideos);
+router.get("/:id", getVideoById);
+router.patch("/:id/views", updateViews);
+
+// Protected routes
+router.post("/upload", authMiddleware, uploadVideo);
 
 module.exports = router;

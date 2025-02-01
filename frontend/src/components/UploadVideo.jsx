@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import { CREATE_CHANNEL_URL, GET_USER_CHANNELS_URL } from "../utils/URLs";
 
 function UploadVideo() {
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +30,7 @@ function UploadVideo() {
 
   const fetchUserChannels = async () => {
     try {
-      const response = await fetch("/api/channels", {
+      const response = await fetch(GET_USER_CHANNELS_URL, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -58,7 +59,7 @@ function UploadVideo() {
   const handleCreateChannel = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/channels", {
+      const response = await fetch(CREATE_CHANNEL_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -262,7 +263,17 @@ function UploadVideo() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 w-full max-w-md">
+          <div className="bg-white rounded-lg p-8 w-full max-w-md relative">
+            <button
+              onClick={() => {
+                setShowModal(false);
+                setStep("select-channel");
+                setSelectedChannel(null);
+              }}
+              className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-full"
+            >
+              ✕
+            </button>
             {step === "select-channel" && renderChannelSelection()}
             {step === "create-channel" && renderChannelCreation()}
             {step === "upload-video" && renderVideoUpload()}

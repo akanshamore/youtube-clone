@@ -14,7 +14,7 @@ export const Home = () => {
       }}
     >
       <Header />
-      <FilterButtons />
+
       <div style={{ display: "flex", backgroundColor: "#f9f9f9", flex: 1 }}>
         <SideBar />
         <Body />

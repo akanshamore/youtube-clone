@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { VideoCard } from "./videoCard";
 import { GET_VIDEOS_URL } from "../utils/URLs";
+import { FilterButtons } from "./FilterButtons";
 
 export const Body = () => {
   const [videos, setVideos] = useState([]);
@@ -20,19 +21,13 @@ export const Body = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        flex: 1,
-        padding: "24px",
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-        gap: "20px",
-        overflowY: "auto",
-      }}
-    >
-      {videos.map((video) => (
-        <VideoCard key={video.id} video={video} />
-      ))}
+    <div className="flex flex-col flex-1">
+      <FilterButtons />
+      <div className="flex-1 p-6 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5 overflow-y-auto">
+        {videos.map((video) => (
+          <VideoCard key={video.id} video={video} />
+        ))}
+      </div>
     </div>
   );
 };

@@ -8,9 +8,11 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import UploadVideo from "./UploadVideo";
+import { setSearchText } from "../redux/slices/filtersSlice";
 
 function Header() {
   const auth = useSelector((state) => state.auth);
+  const { searchText } = useSelector((state) => state.filters);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -37,6 +39,8 @@ function Header() {
             type="text"
             className="w-full px-4 py-2 pl-10 border rounded-full focus:outline-none focus:border-blue-500"
             placeholder="Search"
+            value={searchText}
+            onChange={(e) => dispatch(setSearchText(e.target.value))}
           />
           <FontAwesomeIcon
             icon={faMagnifyingGlass}

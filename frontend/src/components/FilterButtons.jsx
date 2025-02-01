@@ -1,26 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
-import { filters } from "../utils/constants";
-import { setSelectedFilter } from "../redux/slices/filtersSlice";
+import { genres } from "../utils/constants";
+import { setSelectedGenre } from "../redux/slices/filtersSlice";
 
 export const FilterButtons = () => {
   const dispatch = useDispatch();
-  const selectedFilter = useSelector((state) => state.filters.selectedFilter);
+  const selectedGenre = useSelector((state) => state.filters.selectedGenre);
 
-  console.log(selectedFilter);
-  console.log(filters);
   return (
     <div className="flex gap-5 px-6 py-3">
-      {filters.map((filter) => (
+      {genres.map((genre) => (
         <button
-          key={filter}
-          onClick={() => dispatch(setSelectedFilter(filter))}
+          key={genre}
+          onClick={() => dispatch(setSelectedGenre(genre))}
           className={`px-4 py-1 rounded-lg ${
-            selectedFilter === filter
+            selectedGenre === genre
               ? "bg-black text-white"
               : "bg-gray-100 hover:bg-gray-200"
           }`}
         >
-          {filter}
+          {genre}
         </button>
       ))}
     </div>

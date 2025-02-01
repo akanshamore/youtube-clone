@@ -11,6 +11,7 @@ export const LoginPage = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -21,7 +22,7 @@ export const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt with:", formData);
+    setError("");
 
     try {
       const res = await fetch(LOGIN_URL, {
@@ -35,6 +36,8 @@ export const LoginPage = () => {
       if (response.token) {
         dispatch(setAuth(response));
         navigate("/");
+      } else {
+        setError(response.message || "Invalid credentials");
       }
 
       console.log("Response:", response);
@@ -62,6 +65,11 @@ export const LoginPage = () => {
           <p className="text-base text-gray-600">to continue to YouTube</p>
         </div>
 
+        {error && (
+          <div className="mb-4 p-3 text-red-500 bg-red-50 rounded-md text-sm">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <input
@@ -85,15 +93,6 @@ export const LoginPage = () => {
               placeholder="Password"
               required
             />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <button
-              type="button"
-              className="text-blue-600 font-medium text-sm hover:text-blue-800"
-            >
-              Forgot password?
-            </button>
           </div>
 
           <div className="flex items-center justify-between pt-4">

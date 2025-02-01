@@ -6,6 +6,8 @@ const {
   uploadVideo,
   getVideoById,
   updateViews,
+  updateLikes,
+  updateDislikes,
 } = require("../controllers/videoController");
 
 // Public routes
@@ -15,5 +17,7 @@ router.patch("/:id/views", updateViews);
 
 // Protected routes
 router.post("/upload", authMiddleware, uploadVideo);
+router.patch("/:id/likes", authMiddleware, updateLikes);
+router.patch("/:id/dislikes", authMiddleware, updateDislikes);
 
 module.exports = router;

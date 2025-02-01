@@ -1,4 +1,4 @@
-export const filters = [
+export const genres = [
   "All",
   "Music",
   "Gaming",

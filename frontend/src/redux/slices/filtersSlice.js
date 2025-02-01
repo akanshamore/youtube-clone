@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   searchText: "",
-  selectedFilter: "All",
+  selectedGenre: "All",
 };
 
 export const filtersSlice = createSlice({
@@ -12,15 +12,15 @@ export const filtersSlice = createSlice({
     setSearchText: (state, action) => {
       state.searchText = action.payload;
     },
-    setSelectedFilter: (state, action) => {
-      state.selectedFilter = action.payload;
+    setSelectedGenre: (state, action) => {
+      state.selectedGenre = action.payload;
     },
     clearFilters: () => initialState,
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setSearchText, setSelectedFilter, clearFilters } =
+export const { setSearchText, setSelectedGenre, clearFilters } =
   filtersSlice.actions;
 
 export default filtersSlice.reducer;

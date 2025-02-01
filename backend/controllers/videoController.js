@@ -14,9 +14,17 @@ const getVideos = async (req, res) => {
 // Upload new video
 const uploadVideo = async (req, res) => {
   try {
-    const { title, thumbnail, videoUrl, channelId } = req.body;
+    const { title, thumbnail, videoUrl, channelId, description, genre } =
+      req.body;
 
-    if (!title || !thumbnail || !videoUrl || !channelId) {
+    if (
+      !title ||
+      !thumbnail ||
+      !videoUrl ||
+      !channelId ||
+      !description ||
+      !genre
+    ) {
       return res
         .status(400)
         .json({ message: "Please provide all required fields" });
@@ -33,6 +41,8 @@ const uploadVideo = async (req, res) => {
       thumbnail,
       videoUrl,
       channelId,
+      description,
+      genre,
       views: "0", // Default value
     });
 
@@ -67,8 +77,44 @@ const updateViews = async (req, res) => {
       return res.status(404).json({ message: "Video not found" });
     }
 
-    const currentViews = parseInt(video.views);
-    video.views = (currentViews + 1).toString();
+    const currentViews = video.views;
+    video.views = currentViews + 1;
+
+    await video.save();
+    res.json(video);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update video likes
+const updateLikes = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    const currentLikes = video.likes;
+    video.likes = currentLikes + 1;
+
+    await video.save();
+    res.json(video);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update video dislikes
+const updateDislikes = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    const currentDislikes = video.dislikes;
+    video.dislikes = currentDislikes + 1;
 
     await video.save();
     res.json(video);
@@ -82,4 +128,6 @@ module.exports = {
   uploadVideo,
   getVideoById,
   updateViews,
+  updateLikes,
+  updateDislikes,
 };

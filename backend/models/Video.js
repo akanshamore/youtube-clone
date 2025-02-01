@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { genres } = require("../../frontend/src/utils/constants");
 
 const videoSchema = new mongoose.Schema(
   {
@@ -21,20 +22,26 @@ const videoSchema = new mongoose.Schema(
       required: true,
     },
     views: {
-      type: String,
-      default: "0",
+      type: Number,
+      default: 0,
     },
     likes: {
-      type: String,
-      default: "0",
+      type: Number,
+      default: 0,
     },
     dislikes: {
-      type: String,
-      default: "0",
+      type: Number,
+      default: 0,
     },
     description: {
       type: String,
       required: true,
+    },
+    genre: {
+      type: String,
+      required: true,
+      default: "All",
+      enum: genres,
     },
   },
   {

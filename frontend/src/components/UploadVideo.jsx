@@ -7,13 +7,18 @@ import {
   GET_USER_CHANNELS_URL,
   UPLOAD_VIDEO_URL,
 } from "../utils/URLs";
+import { genres } from "../utils/constants";
 
 function UploadVideo() {
   const [showModal, setShowModal] = useState(false);
   const [step, setStep] = useState("select-channel");
   const [channels, setChannels] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState(null);
+  const [message, setMessage] = useState({ type: "", text: "" });
   const auth = useSelector((state) => state.auth);
+
+  const inputClasses =
+    "mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30 transition-all duration-200 bg-gray-50 hover:bg-white";
 
   const [channelData, setChannelData] = useState({
     name: "",
@@ -23,8 +28,9 @@ function UploadVideo() {
   const [videoData, setVideoData] = useState({
     title: "",
     thumbnail: "",
-    videoUrl: "", // Add this field
-    timestamp: new Date().toISOString(),
+    videoUrl: "",
+    description: "",
+    genre: genres[0], // Default to first genre
   });
 
   useEffect(() => {
@@ -89,7 +95,7 @@ function UploadVideo() {
         channelId: selectedChannel._id,
       };
 
-      await fetch(UPLOAD_VIDEO_URL, {
+      const response = await fetch(UPLOAD_VIDEO_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,14 +104,28 @@ function UploadVideo() {
         body: JSON.stringify(videoPayload),
       });
 
-      setShowModal(false);
-      setStep("select-channel");
-      setVideoData({
-        title: "",
-        thumbnail: "",
-        timestamp: new Date().toISOString(),
-      });
+      if (response.ok) {
+        setMessage({ type: "success", text: "Video uploaded successfully!" });
+        setTimeout(() => {
+          setShowModal(false);
+          setStep("select-channel");
+          setMessage({ type: "", text: "" });
+          setVideoData({
+            title: "",
+            thumbnail: "",
+            description: "",
+            videoUrl: "",
+            genre: genres[0],
+          });
+        }, 2000);
+      } else {
+        throw new Error("Failed to upload video");
+      }
     } catch (error) {
+      setMessage({
+        type: "error",
+        text: "Error uploading video. Please try again.",
+      });
       console.error("Error uploading video:", error);
     }
   };
@@ -163,7 +183,7 @@ function UploadVideo() {
             name="name"
             value={channelData.name}
             onChange={handleChannelInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className={inputClasses}
             required
           />
         </div>
@@ -176,7 +196,7 @@ function UploadVideo() {
             name="avatarUrl"
             value={channelData.avatarUrl}
             onChange={handleChannelInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className={inputClasses}
             required
           />
         </div>
@@ -210,6 +230,17 @@ function UploadVideo() {
         />
         <span className="font-medium">{selectedChannel.name}</span>
       </div>
+      {message.text && (
+        <div
+          className={`p-4 mb-4 rounded ${
+            message.type === "success"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {message.text}
+        </div>
+      )}
       <form onSubmit={handleUploadVideo} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -220,7 +251,7 @@ function UploadVideo() {
             name="title"
             value={videoData.title}
             onChange={handleVideoInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className={inputClasses}
             required
           />
         </div>
@@ -233,7 +264,7 @@ function UploadVideo() {
             name="thumbnail"
             value={videoData.thumbnail}
             onChange={handleVideoInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className={inputClasses}
             required
           />
         </div>
@@ -246,9 +277,39 @@ function UploadVideo() {
             name="videoUrl"
             value={videoData.videoUrl}
             onChange={handleVideoInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className={inputClasses}
             required
           />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Description
+          </label>
+          <textarea
+            name="description"
+            value={videoData.description}
+            onChange={handleVideoInputChange}
+            rows="4"
+            className="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30 transition-all duration-200 bg-gray-50 hover:bg-white resize-y"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Genre
+          </label>
+          <select
+            name="genre"
+            value={videoData.genre}
+            onChange={handleVideoInputChange}
+            className={inputClasses}
+            required
+          >
+            {genres.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="flex space-x-3">
           <button

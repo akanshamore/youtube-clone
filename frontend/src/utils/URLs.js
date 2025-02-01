@@ -11,3 +11,5 @@ export const DELETE_CHANNEL_URL = `${BASE_URL}/api/channels/:id`;
 export const UPLOAD_VIDEO_URL = `${BASE_URL}/api/videos/upload`;
 export const GET_VIDEOS_URL = `${BASE_URL}/api/videos`;
 export const GET_VIDEO_BY_ID_URL = `${BASE_URL}/api/videos/`;
+
+export const GET_COMMENTS_URL = `${BASE_URL}/api/comments`;

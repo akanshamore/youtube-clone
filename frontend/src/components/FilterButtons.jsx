@@ -1,6 +1,13 @@
 export const FilterButtons = () => {
   return (
-    <div style={{ display: "flex", gap: "12px", padding: "12px 24px" }}>
+    <div
+      style={{
+        display: "flex",
+        gap: "12px",
+        padding: "12px 24px",
+        justifyContent: "center",
+      }}
+    >
       <button>All</button>
       <button>Music</button>
       <button>Gaming</button>

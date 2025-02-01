@@ -1,12 +1,24 @@
+import { useDispatch, useSelector } from "react-redux";
 import { filters } from "../utils/constants";
+import { setSelectedFilter } from "../redux/slices/filtersSlice";
 
 export const FilterButtons = () => {
+  const dispatch = useDispatch();
+  const selectedFilter = useSelector((state) => state.filters.selectedFilter);
+
+  console.log(selectedFilter);
+  console.log(filters);
   return (
     <div className="flex gap-5 px-6 py-3">
       {filters.map((filter) => (
         <button
           key={filter}
-          className="bg-[#0F0F0F] text-white px-3 py-2 rounded-lg border border-[rgba(255,255,255,0.1)] text-sm font-medium whitespace-nowrap hover:bg-[#272727] transition-colors"
+          onClick={() => dispatch(setSelectedFilter(filter))}
+          className={`px-4 py-1 rounded-lg ${
+            selectedFilter === filter
+              ? "bg-black text-white"
+              : "bg-gray-100 hover:bg-gray-200"
+          }`}
         >
           {filter}
         </button>

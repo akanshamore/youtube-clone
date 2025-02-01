@@ -26,7 +26,7 @@ export const SignupPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup attempt with:", formData);
+
     try {
       const res = await fetch(REGISTER_URL, {
         method: "POST",
@@ -44,8 +44,6 @@ export const SignupPage = () => {
       if (response.error) {
         setError(response.message);
       }
-
-      console.log("Response:", response);
     } catch (error) {
       console.log("Error:", error);
       setError("An error occurred. Please try again.");

@@ -1,9 +1,19 @@
 import { timeAgo } from "../utils/timeAgo";
+import { useNavigate } from "react-router-dom";
 
 export const VideoCard = ({ video }) => {
-  console.log(video);
+  const navigate = useNavigate();
+
+  const handleVideoClick = () => {
+    navigate(`/watch/${video._id}`);
+  };
+
   return (
-    <div key={video.id} style={{ cursor: "pointer" }}>
+    <div
+      key={video.id}
+      style={{ cursor: "pointer" }}
+      onClick={handleVideoClick}
+    >
       <img
         src={video.thumbnail}
         alt={video.title}

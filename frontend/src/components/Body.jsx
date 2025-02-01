@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { VideoCard } from "./videoCard";
+import { GET_VIDEOS_URL } from "../utils/URLs";
 
 export const Body = () => {
   const [videos, setVideos] = useState([]);
@@ -7,7 +8,7 @@ export const Body = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/videos");
+        const response = await fetch(GET_VIDEOS_URL);
         const data = await response.json();
         setVideos(data);
       } catch (error) {

@@ -7,6 +7,7 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
+import UploadVideo from "./UploadVideo";
 
 function Header() {
   const auth = useSelector((state) => state.auth);
@@ -47,6 +48,7 @@ function Header() {
       <div className="flex items-center">
         {auth.name ? (
           <div className="flex items-center space-x-4">
+            <UploadVideo />
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white font-semibold">
                 {auth.name.charAt(0).toUpperCase()}

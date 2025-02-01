@@ -1,7 +1,6 @@
 import { Body } from "../components/Body";
 import Header from "../components/Header";
 import { SideBar } from "../components/Sidebar";
-import { FilterButtons } from "../components/FilterButtons";
 
 export const Home = () => {
   return (

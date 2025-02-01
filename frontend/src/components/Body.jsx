@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { VideoCard } from "./videoCard";
 import { GET_VIDEOS_URL } from "../utils/URLs";
 import { FilterButtons } from "./FilterButtons";

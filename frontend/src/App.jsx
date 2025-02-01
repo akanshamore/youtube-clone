@@ -5,8 +5,22 @@ import { LoginPage } from "./pages/LoginPage";
 import { SignupPage } from "./pages/SignUpPage";
 import { VideoPlayer } from "./pages/VideoPlayer";
 import Header from "./components/Header";
+import { useEffect } from "react";
+import { setAuth } from "./redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 
+const checkAuth = (dispatch) => {
+  const auth = localStorage.getItem("auth");
+  if (auth) {
+    dispatch(setAuth(JSON.parse(auth)));
+  }
+};
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    checkAuth(dispatch);
+  }, [dispatch]);
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />

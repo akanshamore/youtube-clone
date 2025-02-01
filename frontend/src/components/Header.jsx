@@ -1,4 +1,3 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
@@ -18,19 +17,22 @@ function Header() {
   const handleLogout = () => {
     console.log("Logout clicked");
     dispatch(logout());
+    localStorage.removeItem("auth");
   };
 
   return (
     <div className="flex items-center justify-between px-6 py-3 bg-white shadow-sm">
       <div className="flex items-center">
-        <img
-          className="h-8 w-auto mr-2"
-          src="https://cdn.pixabay.com/photo/2016/11/19/03/08/youtube-1837872_1280.png"
-          alt="logo"
-        />
-        <h1 className="text-xl font-bold">
-          YouTube<sup className="text-xs">IN</sup>
-        </h1>
+        <Link to="/" className="flex items-center">
+          <img
+            className="h-8 w-auto mr-2"
+            src="https://cdn.pixabay.com/photo/2016/11/19/03/08/youtube-1837872_1280.png"
+            alt="logo"
+          />
+          <h1 className="text-xl font-bold">
+            YouTube<sup className="text-xs">IN</sup>
+          </h1>
+        </Link>
       </div>
 
       <div className="flex items-center flex-1 max-w-2xl mx-8">

@@ -4,12 +4,13 @@ import {
   GET_COMMENTS_URL,
   GET_VIDEO_BY_ID_URL,
   GET_VIDEOS_URL,
+  CREATE_COMMENT_URL,
 } from "../utils/URLs";
 import { useSelector } from "react-redux";
 
 export const VideoPlayer = () => {
   const auth = useSelector((state) => state.auth);
-  console.log("auth is", auth);
+  const [comment, setComment] = useState("");
   const { videoId } = useParams();
   const [video, setVideo] = useState(null);
   const [comments, setComments] = useState([]);
@@ -59,6 +60,8 @@ export const VideoPlayer = () => {
       if (!response.ok) throw new Error("Failed to fetch video details");
       const data = await response.json();
       setVideo(data);
+      setLikes(data.likes);
+      setDislikes(data.dislikes);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -94,6 +97,7 @@ export const VideoPlayer = () => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.token}`,
         },
         body: JSON.stringify({ likes: video.likes + 1 }),
       });
@@ -104,12 +108,61 @@ export const VideoPlayer = () => {
         console.log("Failed to update likes");
       }
     } catch (error) {
-      console.log("Error updating views:", error);
+      console.log("Error updating likes:", error);
     }
   };
 
-  const handleDislike = () => {
-    setDislikes((prev) => prev + 1);
+  const handleDislike = async () => {
+    try {
+      const response = await fetch(
+        `${GET_VIDEO_BY_ID_URL}/${videoId}/dislikes`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.token}`,
+          },
+          body: JSON.stringify({ dislikes: video.dislikes + 1 }),
+        }
+      );
+      if (response.ok) {
+        console.log("dislikes updated successfully");
+        setDislikes((prev) => prev + 1);
+      } else {
+        console.log("Failed to update dislikes");
+      }
+    } catch (error) {
+      console.log("Error updating dislikes:", error);
+    }
+  };
+
+  const handleCommentSubmit = async (e) => {
+    console.log("handleCommentSubmit called");
+    e.preventDefault();
+
+    try {
+      const response = await fetch(CREATE_COMMENT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.token}`,
+        },
+        body: JSON.stringify({
+          videoId,
+          text: comment,
+        }),
+      });
+      if (response.ok) {
+        console.log("Comment added successfully");
+        fetchComments();
+        setComment("");
+        e.target.reset();
+      } else {
+        console.log("Failed to add comment");
+      }
+    } catch (error) {
+      console.log("Error adding comment:", error);
+    }
   };
 
   if (!video) return <div className="text-center p-4">Loading...</div>;
@@ -139,9 +192,9 @@ export const VideoPlayer = () => {
                 />
                 <div>
                   <h3 className="font-medium">{video.channelId.name}</h3>
-                  <button className="bg-red-600 text-white px-4 py-2 rounded-full text-sm">
-                    Subscribe
-                  </button>
+                  <span className="text-gray-600 text-sm">
+                    {video.views.toLocaleString()} views
+                  </span>
                 </div>
               </div>
 
@@ -175,34 +228,68 @@ export const VideoPlayer = () => {
           </div>
 
           <div className="bg-white p-5 rounded-xl">
-            <h3 className="text-lg font-bold mb-4">Comments</h3>
-            <div className="flex gap-3 mb-6">
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                disabled={!auth?.email}
-                className="flex-1 p-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
-              />
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-                disabled={!auth?.email}
-              >
-                Comment
-              </button>
-            </div>
-            {comments.map((comment) => (
-              <div key={comment.id} className="flex gap-3 mb-4">
-                <img
-                  src={comment.user.avatar}
-                  alt={comment.user.name}
-                  className="w-10 h-10 rounded-full"
-                />
-                <div>
-                  <h4 className="font-medium">{comment.user.name}</h4>
-                  <p className="text-gray-700">{comment.content}</p>
+            <h3 className="text-lg font-bold mb-4">
+              {comments.length} Comments
+            </h3>
+
+            <div className="mb-8">
+              <div className="flex gap-4 items-start">
+                <div className="flex-1">
+                  <input
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    type="text"
+                    placeholder={
+                      auth?.email
+                        ? "Add a comment..."
+                        : "Please login to comment"
+                    }
+                    disabled={!auth?.email}
+                    className="w-full p-3 border-b border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
+                  />
+                  {comment && (
+                    <div className="flex justify-end gap-3 mt-3">
+                      <button
+                        onClick={() => setComment("")}
+                        className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleCommentSubmit}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
+                      >
+                        Comment
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="space-y-6">
+              {comments.map((comment) => (
+                <div key={comment.id} className="flex gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-medium">{comment.userId.name}</h4>
+                      <span className="text-sm text-gray-500">
+                        {new Date(comment.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 mt-1">{comment.text}</p>
+                    <div className="flex gap-4 mt-2">
+                      <button className="text-sm text-gray-500 hover:text-gray-700">
+                        👍 Like
+                      </button>
+                      <button className="text-sm text-gray-500 hover:text-gray-700">
+                        Reply
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

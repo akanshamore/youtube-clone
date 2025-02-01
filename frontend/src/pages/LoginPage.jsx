@@ -35,6 +35,7 @@ export const LoginPage = () => {
 
       if (response.token) {
         dispatch(setAuth(response));
+        localStorage.setItem("auth", JSON.stringify(response));
         navigate("/");
       } else {
         setError(response.message || "Invalid credentials");

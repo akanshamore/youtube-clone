@@ -13,3 +13,4 @@ export const GET_VIDEOS_URL = `${BASE_URL}/api/videos`;
 export const GET_VIDEO_BY_ID_URL = `${BASE_URL}/api/videos/`;
 
 export const GET_COMMENTS_URL = `${BASE_URL}/api/comments`;
+export const CREATE_COMMENT_URL = `${BASE_URL}/api/comments`;

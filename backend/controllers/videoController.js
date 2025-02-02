@@ -123,6 +123,19 @@ const updateDislikes = async (req, res) => {
   }
 };
 
+// get videos by channelId
+const getVideosByChannelId = async (req, res) => {
+  try {
+    const videos = await Video.find({});
+    res.json(videos);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching videos",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getVideos,
   uploadVideo,
@@ -130,4 +143,5 @@ module.exports = {
   updateViews,
   updateLikes,
   updateDislikes,
+  getVideosByChannelId,
 };

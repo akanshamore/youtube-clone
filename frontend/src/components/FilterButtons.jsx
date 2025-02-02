@@ -7,20 +7,22 @@ export const FilterButtons = () => {
   const selectedGenre = useSelector((state) => state.filters.selectedGenre);
 
   return (
-    <div className="flex gap-5 px-6 py-3">
-      {genres.map((genre) => (
-        <button
-          key={genre}
-          onClick={() => dispatch(setSelectedGenre(genre))}
-          className={`px-4 py-1 rounded-lg ${
-            selectedGenre === genre
-              ? "bg-black text-white"
-              : "bg-gray-100 hover:bg-gray-200"
-          }`}
-        >
-          {genre}
-        </button>
-      ))}
+    <div className="w-full overflow-x-auto scrollbar-hide">
+      <div className="flex gap-3 px-4 py-3 min-w-max md:gap-5 md:px-6">
+        {genres.map((genre) => (
+          <button
+            key={genre}
+            onClick={() => dispatch(setSelectedGenre(genre))}
+            className={`whitespace-nowrap px-3 py-1 text-sm rounded-lg md:px-4 md:text-base ${
+              selectedGenre === genre
+                ? "bg-black text-white"
+                : "bg-gray-100 hover:bg-gray-200"
+            }`}
+          >
+            {genre}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

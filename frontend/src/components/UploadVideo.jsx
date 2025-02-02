@@ -1,21 +1,25 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideo } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CREATE_CHANNEL_URL,
   GET_USER_CHANNELS_URL,
+  GET_VIDEOS_URL,
   UPLOAD_VIDEO_URL,
 } from "../utils/URLs";
 import { genres } from "../utils/constants";
 
+import { setVideos } from "../redux/slices/videosSlice";
+
 function UploadVideo() {
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [step, setStep] = useState("select-channel");
   const [channels, setChannels] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState(null);
   const [message, setMessage] = useState({ type: "", text: "" });
-  const auth = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.configs.auth);
 
   const inputClasses =
     "mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30 transition-all duration-200 bg-gray-50 hover:bg-white";
@@ -106,6 +110,10 @@ function UploadVideo() {
 
       if (response.ok) {
         setMessage({ type: "success", text: "Video uploaded successfully!" });
+        const videosResponse = await fetch(GET_VIDEOS_URL);
+        const videos = await videosResponse.json();
+        dispatch(setVideos(videos));
+
         setTimeout(() => {
           setShowModal(false);
           setStep("select-channel");

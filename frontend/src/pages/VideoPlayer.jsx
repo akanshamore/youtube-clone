@@ -9,7 +9,7 @@ import {
 import { useSelector } from "react-redux";
 
 export const VideoPlayer = () => {
-  const auth = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.configs.auth);
   const [comment, setComment] = useState("");
   const { videoId } = useParams();
   const [video, setVideo] = useState(null);
@@ -32,8 +32,6 @@ export const VideoPlayer = () => {
     }
   }, [video]);
 
-  console.log("video is", video);
-
   const updateViews = async () => {
     try {
       const response = await fetch(`${GET_VIDEO_BY_ID_URL}/${videoId}/views`, {
@@ -45,8 +43,6 @@ export const VideoPlayer = () => {
       });
       if (response.ok) {
         console.log("Views updated successfully");
-      } else {
-        console.log("Failed to update views");
       }
     } catch (error) {
       console.log("Error updating views:", error);
@@ -83,7 +79,6 @@ export const VideoPlayer = () => {
     try {
       const response = await fetch(GET_VIDEOS_URL);
       const data = await response.json();
-      // Filter out the current video from recommendations
       const filteredVideos = data.filter((video) => video._id !== videoId);
       setRecommendedVideos(filteredVideos);
     } catch (error) {
@@ -102,10 +97,7 @@ export const VideoPlayer = () => {
         body: JSON.stringify({ likes: video.likes + 1 }),
       });
       if (response.ok) {
-        console.log("Likes updated successfully");
         setLikes((prev) => prev + 1);
-      } else {
-        console.log("Failed to update likes");
       }
     } catch (error) {
       console.log("Error updating likes:", error);
@@ -126,10 +118,7 @@ export const VideoPlayer = () => {
         }
       );
       if (response.ok) {
-        console.log("dislikes updated successfully");
         setDislikes((prev) => prev + 1);
-      } else {
-        console.log("Failed to update dislikes");
       }
     } catch (error) {
       console.log("Error updating dislikes:", error);
@@ -137,9 +126,7 @@ export const VideoPlayer = () => {
   };
 
   const handleCommentSubmit = async (e) => {
-    console.log("handleCommentSubmit called");
     e.preventDefault();
-
     try {
       const response = await fetch(CREATE_COMMENT_URL, {
         method: "POST",
@@ -153,37 +140,37 @@ export const VideoPlayer = () => {
         }),
       });
       if (response.ok) {
-        console.log("Comment added successfully");
         fetchComments();
         setComment("");
         e.target.reset();
-      } else {
-        console.log("Failed to add comment");
       }
     } catch (error) {
       console.log("Error adding comment:", error);
     }
   };
 
-  if (!video) return <div className="text-center p-4">Loading...</div>;
-
-  if (loading) return <div className="text-center p-4">Loading...</div>;
+  if (!video || loading)
+    return <div className="text-center p-4">Loading...</div>;
   if (error) return <div className="text-center p-4 text-red-600">{error}</div>;
 
   return (
-    <div className="bg-[#f9f9f9] p-5">
-      <div className="max-w-[1800px] mx-auto flex gap-6">
-        <div className="flex-1 max-w-[70%]">
-          <div className="mb-5">
-            <video controls className="w-full rounded-xl">
+    <div className="bg-[#f9f9f9] p-2 md:p-4 lg:p-5">
+      <div className="max-w-[1800px] mx-auto flex flex-col lg:flex-row gap-4 lg:gap-6">
+        {/* Main Content */}
+        <div className="w-full lg:w-[70%]">
+          {/* Video Player */}
+          <div className="mb-4 lg:mb-5">
+            <video controls className="w-full h-auto rounded-xl">
               <source src={video.videoUrl} type="video/mp4" />
             </video>
           </div>
 
-          <div className="bg-white p-5 rounded-xl mb-5">
-            <h1 className="text-xl font-bold mb-4">{video.title}</h1>
+          {/* Video Info */}
+          <div className="bg-white p-3 md:p-4 lg:p-5 rounded-xl mb-4">
+            <h1 className="text-lg md:text-xl font-bold mb-4">{video.title}</h1>
 
-            <div className="flex justify-between items-center py-4 border-b border-gray-200">
+            {/* Channel Info and Actions */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 py-4 border-b border-gray-200">
               <div className="flex items-center gap-3">
                 <img
                   src={video.channelId.avatarUrl}
@@ -198,7 +185,7 @@ export const VideoPlayer = () => {
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={handleLike}
                   disabled={!auth?.email}
@@ -222,16 +209,19 @@ export const VideoPlayer = () => {
               </div>
             </div>
 
+            {/* Description */}
             <div className="mt-4 p-4 bg-gray-50 rounded-xl">
-              <p>{video.description}</p>
+              <p className="whitespace-pre-wrap">{video.description}</p>
             </div>
           </div>
 
-          <div className="bg-white p-5 rounded-xl">
+          {/* Comments Section */}
+          <div className="bg-white p-3 md:p-4 lg:p-5 rounded-xl">
             <h3 className="text-lg font-bold mb-4">
               {comments.length} Comments
             </h3>
 
+            {/* Comment Input */}
             <div className="mb-8">
               <div className="flex gap-4 items-start">
                 <div className="flex-1">
@@ -267,10 +257,11 @@ export const VideoPlayer = () => {
               </div>
             </div>
 
+            {/* Comments List */}
             <div className="space-y-6">
               {comments.map((comment) => (
                 <div key={comment.id} className="flex gap-4">
-                  <div>
+                  <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h4 className="font-medium">{comment.userId.name}</h4>
                       <span className="text-sm text-gray-500">
@@ -293,32 +284,35 @@ export const VideoPlayer = () => {
           </div>
         </div>
 
-        <div className="w-[30%] bg-white p-5 rounded-xl h-fit">
+        {/* Recommended Videos */}
+        <div className="w-full lg:w-[30%] bg-white p-3 md:p-4 lg:p-5 rounded-xl h-fit">
           <h3 className="font-bold mb-4">Recommended Videos</h3>
-          {recommendedVideos.map((recommendedVideo) => (
-            <Link
-              to={`/watch/${recommendedVideo._id}`}
-              key={recommendedVideo._id}
-              className="flex gap-2 mb-3 cursor-pointer hover:bg-gray-100 p-2 rounded-lg"
-            >
-              <img
-                src={recommendedVideo.thumbnail}
-                alt={recommendedVideo.title}
-                className="w-42 h-24 rounded-lg object-cover"
-              />
-              <div>
-                <h4 className="font-medium text-sm">
-                  {recommendedVideo.title}
-                </h4>
-                <p className="text-gray-600 text-xs">
-                  {recommendedVideo.channelId.name}
-                </p>
-                <p className="text-gray-600 text-xs">
-                  {recommendedVideo.views} views
-                </p>
-              </div>
-            </Link>
-          ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+            {recommendedVideos.map((recommendedVideo) => (
+              <Link
+                to={`/watch/${recommendedVideo._id}`}
+                key={recommendedVideo._id}
+                className="flex gap-2 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors"
+              >
+                <img
+                  src={recommendedVideo.thumbnail}
+                  alt={recommendedVideo.title}
+                  className="w-32 h-20 md:w-40 md:h-24 rounded-lg object-cover"
+                />
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-medium text-sm line-clamp-2">
+                    {recommendedVideo.title}
+                  </h4>
+                  <p className="text-gray-600 text-xs mt-1">
+                    {recommendedVideo.channelId.name}
+                  </p>
+                  <p className="text-gray-600 text-xs">
+                    {recommendedVideo.views.toLocaleString()} views
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </div>

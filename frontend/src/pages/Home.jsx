@@ -1,8 +1,10 @@
+import { useSelector } from "react-redux";
 import { Body } from "../components/Body";
 import Header from "../components/Header";
 import { SideBar } from "../components/Sidebar";
 
 export const Home = () => {
+  const sideBarOpen = useSelector((state) => state.configs.sideBarOpen);
   return (
     <div
       style={{
@@ -15,7 +17,8 @@ export const Home = () => {
       <Header />
 
       <div style={{ display: "flex", backgroundColor: "#f9f9f9", flex: 1 }}>
-        <SideBar />
+        {sideBarOpen && <SideBar />}
+
         <Body />
       </div>
     </div>

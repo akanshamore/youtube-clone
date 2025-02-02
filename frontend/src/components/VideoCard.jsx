@@ -59,7 +59,7 @@ export const VideoCard = ({ video }) => {
               color: "#606060",
             }}
           >
-            {video.views} • {timeAgo(video.createdAt)}
+            {video.views} Views • {timeAgo(video.createdAt)} • {video.genre}
           </p>
         </div>
       </div>

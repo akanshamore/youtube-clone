@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_URL } from "../utils/URLs";
 import { useDispatch } from "react-redux";
-import { setAuth } from "../redux/slices/authSlice";
+import { setAuth } from "../redux/slices/configsSlice";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -40,8 +40,6 @@ export const LoginPage = () => {
       } else {
         setError(response.message || "Invalid credentials");
       }
-
-      console.log("Response:", response);
     } catch (error) {
       console.log("Error:", error);
     }

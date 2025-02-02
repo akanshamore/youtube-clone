@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setAuth } from "../redux/slices/authSlice";
+import { setAuth } from "../redux/slices/configsSlice";
 import { REGISTER_URL } from "../utils/URLs";
 
 export const SignupPage = () => {
@@ -38,6 +38,7 @@ export const SignupPage = () => {
 
       if (response.token) {
         dispatch(setAuth(response));
+        localStorage.setItem("auth", JSON.stringify(response));
         navigate("/");
       }
 

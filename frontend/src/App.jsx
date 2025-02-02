@@ -6,8 +6,10 @@ import { SignupPage } from "./pages/SignUpPage";
 import { VideoPlayer } from "./pages/VideoPlayer";
 import Header from "./components/Header";
 import { useEffect } from "react";
-import { setAuth } from "./redux/slices/authSlice";
+import { setAuth } from "./redux/slices/configsSlice";
 import { useDispatch } from "react-redux";
+import { Channels } from "./pages/Channels";
+import { ChannelPage } from "./pages/ChannelPage";
 
 const checkAuth = (dispatch) => {
   const auth = localStorage.getItem("auth");
@@ -30,6 +32,24 @@ function App() {
           <>
             <Header />
             <VideoPlayer />
+          </>
+        }
+      />
+      <Route
+        path="/channels"
+        element={
+          <>
+            <Header />
+            <Channels />
+          </>
+        }
+      />
+      <Route
+        path="/channel/:channelId"
+        element={
+          <>
+            <Header />
+            <ChannelPage />
           </>
         }
       />

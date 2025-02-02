@@ -9,7 +9,6 @@ export const Body = () => {
   const videos = useSelector((state) => state.videos);
   const { searchText, selectedGenre } = useSelector((state) => state.filters);
 
-  console.log(selectedGenre);
   const filteredVideos = videos.filter((video) => {
     const titleMatch = video.title
       .toLowerCase()
@@ -34,15 +33,15 @@ export const Body = () => {
   }, []);
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col flex-1 w-full">
       <FilterButtons />
-      <div className="flex-1 p-6 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5 overflow-y-auto">
+      <div className="flex-1 p-2 sm:p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 overflow-y-auto">
         {filteredVideos.length > 0 ? (
           filteredVideos.map((video) => (
             <VideoCard key={video._id} video={video} />
           ))
         ) : (
-          <div className="col-span-full text-center text-lg text-gray-600 mt-10">
+          <div className="col-span-full text-center text-base sm:text-lg text-gray-600 mt-6 sm:mt-10">
             No videos found for your search criteria
           </div>
         )}

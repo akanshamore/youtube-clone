@@ -8,12 +8,14 @@ const {
   updateViews,
   updateLikes,
   updateDislikes,
+  getVideosByChannelId,
 } = require("../controllers/videoController");
 
 // Public routes
 router.get("/", getVideos);
 router.get("/:id", getVideoById);
 router.patch("/:id/views", updateViews);
+router.get("/channel/:channelId", authMiddleware, getVideosByChannelId);
 
 // Protected routes
 router.post("/upload", authMiddleware, uploadVideo);

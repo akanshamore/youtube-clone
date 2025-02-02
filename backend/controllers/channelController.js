@@ -2,7 +2,6 @@ const Channel = require("../models/Channel");
 
 // Create new channel
 const createChannel = async (req, res) => {
-  console.log(req.body);
   try {
     const { name, avatarUrl } = req.body;
 
@@ -33,19 +32,6 @@ const getUserChannels = async (req, res) => {
   try {
     const channels = await Channel.find({ userId: req.user._id });
     res.json(channels);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// Get channel by ID
-const getChannelById = async (req, res) => {
-  try {
-    const channel = await Channel.findById(req.params.id);
-    if (!channel) {
-      return res.status(404).json({ message: "Channel not found" });
-    }
-    res.json(channel);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -103,7 +89,6 @@ const deleteChannel = async (req, res) => {
 module.exports = {
   createChannel,
   getUserChannels,
-  getChannelById,
   updateChannel,
   deleteChannel,
 };
